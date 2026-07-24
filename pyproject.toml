@@ -1,10 +1,10 @@
 [project]
 name = "crczp-openstack-lib"
-version = "1.0.5"
+version = "1.1.0"
 description = "Cyberrangecz platform OpenStack Driver Python lib"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 authors = [{ name = "cybersecurityhub.cz" }]
 dependencies = [
     "PyYAML>=6.0.2",
@@ -24,6 +24,24 @@ dependencies = [
 [project.urls]
 GitHub = "https://github.com/cyberrangecz/backend-openstack-lib"
 
+# DEV ONLY — consume the in-development sibling libs from their feature branches.
+# Remove before the master release (see the release runbook). uv strips this from built wheels.
+[tool.uv.sources]
+crczp-python-commons = { git = "https://github.com/cyberrangecz/backend-python-commons", branch = "feature/network-forwarding" }
+crczp-topology-definition = { git = "https://github.com/cyberrangecz/backend-topology-definition", branch = "feature/network-forwarding" }
+
+[dependency-groups]
+test = [
+    "pytest",
+    "pytest-mock",
+    "pytest-structlog",
+    "pycryptodome",
+]
+lint = [
+    "pylint",
+    "pycryptodome",
+    "typing-extensions",
+]
 
 [build-system]
 # TODO: Replace this with uv_build when it is it released for GA.
