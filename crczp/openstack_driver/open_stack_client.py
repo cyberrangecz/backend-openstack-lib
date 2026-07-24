@@ -1,6 +1,6 @@
 """CrczpOpenStackClient — high-level interface for the OpenStack driver."""
 
-from typing import Any, Optional
+from typing import Any
 
 import novaclient.v2.keypairs
 
@@ -26,12 +26,14 @@ class CrczpOpenStackClient(CrczpCloudClientBase):  # type: ignore[misc]
     :raise: ValueError if some of used clients doesn't exist.
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         auth_url: str,
         application_credential_id: str,
         application_credential_secret: str,
         trc: TransformationConfiguration,
+        hypervisor_cidr: str | None = None,
+        mirror_type: str = 'gre',
     ):
         self.session = utils.get_session(
             auth_url, application_credential_id, application_credential_secret
@@ -47,6 +49,8 @@ class CrczpOpenStackClient(CrczpCloudClientBase):  # type: ignore[misc]
             application_credential_id,
             application_credential_secret,
             trc,
+            hypervisor_cidr,
+            mirror_type,
         )
 
     @staticmethod
@@ -164,7 +168,7 @@ class CrczpOpenStackClient(CrczpCloudClientBase):  # type: ignore[misc]
 
     @check_authentication
     def create_keypair(
-        self, name: str, public_key: Optional[str] = None, key_type: str = 'ssh'
+        self, name: str, public_key: str | None = None, key_type: str = 'ssh'
     ) -> None:
         """
         Create key-pair in OpenStack. If public_key is not specified, new key-pair is created.
